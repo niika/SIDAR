@@ -211,7 +211,9 @@ bpy.context.scene.render.engine = 'CYCLES'
 print(sys.argv)
 n = 50010
 #generate_image((n,n+1000), "DIAR-Eval/")    
-generate_dataset_wikiart(src="wikiart/", dst="test2/", ids= (n,n+1), n_cameras=5, homography=True)    
-generate_dataset_wikiart(src="wikiart/", dst="test2/", ids= (n+1,n+2), n_cameras=5, homography=False)    
+#generate_dataset_wikiart(src="wikiart/", dst="test2/", ids= (n,n+1), n_cameras=5, homography=True)    
+generate_dataset_wikiart(src="wikiart/", dst="test2/", ids= (n,n+1), n_cameras=5, homography=False)    
+
+#blender --background --python
 
 
