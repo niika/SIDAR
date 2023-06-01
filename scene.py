@@ -109,6 +109,7 @@ def generate_scene(img_path, n_lights= 5, n_objects=3):
     add_plane(img_path)
     #add_front_camera("Camera0")
     light = np.random.randint(*n_lights)
+    print(light)
     add_illumination(light)
     n_objects = np.random.randint(*n_objects)
     add_objects(n_objects)

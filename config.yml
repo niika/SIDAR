@@ -1,0 +1,12 @@
+# source directory
+src : ../wikiart/
+# destination directory
+dst : ../test2/
+# Number of images to generate
+n_cameras : 5
+# Number of lights added to the scene
+n_lights : [2,5] 
+# Number of occlusions added to the scene
+n_objects: [0,4]
+
+homography: True
