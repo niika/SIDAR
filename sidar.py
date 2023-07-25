@@ -8,10 +8,11 @@ import glob
 import os
 import sys
 import yaml
+import argparse
 
 
 
-# HACK to import additional scripts 
+# HACK to import additional scripts into blender's python environment
 # https://docs.blender.org/api/current/info_tips_and_tricks.html
 full_path = os.path.realpath(__file__)
 path,_ = os.path.split(full_path)
@@ -84,10 +85,14 @@ n = 50010
 #generate_dataset_wikiart(src="wikiart/", dst="test2/", ids= (n,n+1), n_cameras=5, homography=False)    
 
 
-
 with open("config.yml", "r") as stream:
     try:
         config = yaml.safe_load(stream)
+        argv = sys.argv
+        print(argv)
+        argv = argv[argv.index("--") + 1:]  # get all args after "--"
+
+        print(argv)
         print(config["src"])
         print(config)        
         generate_dataset_wikiart(ids=(n,n+1),**config)
@@ -96,6 +101,6 @@ with open("config.yml", "r") as stream:
         print(exc)
 
 
-#blender --background --python
+# blender -b --python sidar.py
 
 
