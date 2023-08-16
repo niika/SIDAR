@@ -36,16 +36,20 @@ def generate_dataset_wikiart(src="wikiart/", dst = "SIDAR/",  ids=None,  **kwarg
             fp.write("%d:%s\n" % (i,item))
     
     if ids is None:
-        ids = [len(imgs)]
+        ids = range(len(imgs))
 
-    for i in range(*ids):
-        print("Rendering:", images_paths[i])
-        generate_sequence(img_file=os.path.join(dirs[i], imgs[i]), dst=os.path.join(dst,str(i)), **kwargs)
+    for i in ids:
+        try:
+            print("Rendering:", images_paths[i])
+            generate_sequence(img_file=os.path.join(dirs[i], imgs[i]), dst=os.path.join(dst,str(i)), **kwargs)
+        except:
+            print(f"Error in id= {i}")
 
 
 
     
-def generate_sequence(img_file, dst = "distortions/", n_cameras = 50, homography=False, n_lights=[2,5], n_objects=[0,3], **kwargs ):
+def generate_sequence(img_file, dst = "distortions/", n_cameras = 50, homography=False, n_lights=[2,5],
+                       n_objects=[0,3], ambient=False, **kwargs ):
     """_summary_
 
     Args:
@@ -59,7 +63,7 @@ def generate_sequence(img_file, dst = "distortions/", n_cameras = 50, homography
     if homography:
         add_cameras(n_cameras)
     add_front_camera("Camera0")
-    render_ambient("Camera0", os.path.join(dst,"gt.png"))
+    render_ground_truth("Camera0", os.path.join(dst,"gt.png"))
 
     if homography:
         for cam_i in range(n_cameras+1):
@@ -70,7 +74,10 @@ def generate_sequence(img_file, dst = "distortions/", n_cameras = 50, homography
     for j in range(n_cameras+1):
         generate_scene(img_file, n_lights, n_objects)
         camera = f"Camera{j}" if homography else "Camera0"
-        render(camera, dst +"/{}.png".format(j))
+        if ambient:
+            render_ambient(camera, dst +"/{}.png".format(j))
+        else:
+            render(camera, dst +"/{}.png".format(j))
         render_mask(camera, dst +"/{}-m.png".format(j))
     
 
@@ -84,23 +91,37 @@ n = 50010
 #generate_dataset_wikiart(src="wikiart/", dst="test2/", ids= (n,n+1), n_cameras=5, homography=True)    
 #generate_dataset_wikiart(src="wikiart/", dst="test2/", ids= (n,n+1), n_cameras=5, homography=False)    
 
+argv = sys.argv
+
+argv = argv[argv.index("--") + 1:]  # get all args after "--"
+parser = argparse.ArgumentParser(description='Adding lights, shadows and occlusions using Blender')
+parser.add_argument('--src', help='source image')
+parser.add_argument('--dst', help='source image')
+parser.add_argument('--n_cameras', metavar='N', type=int, default= 10,
+                    help='number of cameras')
+parser.add_argument('--n_lights', metavar='L', type=int, default= [2,5], nargs=2,
+                    help='number of lights')
+parser.add_argument('--n_objects', metavar='O', type=int, default= [0,4], nargs=2,
+                    help='number of objects')
+parser.add_argument('--homography', dest='homography', action='store_true', default=False)
+args = parser.parse_args(argv)
+print(args.n_lights)
 
 with open("config.yml", "r") as stream:
     try:
         config = yaml.safe_load(stream)
-        argv = sys.argv
-        print(argv)
-        argv = argv[argv.index("--") + 1:]  # get all args after "--"
 
+        ids = np.random.randint(0,80000, 10)
+        print(ids)
         print(argv)
         print(config["src"])
         print(config)        
-        generate_dataset_wikiart(ids=(n,n+1),**config)
+        generate_dataset_wikiart(ids=ids,**config)
 
     except yaml.YAMLError as exc:
         print(exc)
 
-
+# blender -b --python sidar.py -- <Command line arguments >
 # blender -b --python sidar.py
 
 

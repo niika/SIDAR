@@ -102,7 +102,7 @@ def render(camera = "Camera0", image_path="output.png"):
 ############## Render #################
 
 
-def render_ambient(camera = "Camera0", image_path="output.png"):
+def render_ground_truth(camera = "Camera0", image_path="output.png"):
 
      # Remove Materials
     for mat in bpy.data.materials:
@@ -129,6 +129,33 @@ def render_ambient(camera = "Camera0", image_path="output.png"):
     obj.data.materials.append(mat)
     
     
+    bpy.context.scene.render.engine = 'BLENDER_EEVEE'  
+    bpy.data.worlds["World"].node_tree.nodes["Background"].inputs[0].default_value = (1, 1, 1, 1)
+    bpy.context.scene.view_settings.view_transform = 'Standard'
+
+    scene = bpy.context.scene
+    scene.camera = bpy.data.objects[camera]
+
+    scene.cycles.time_limit= 1
+    scene.render.image_settings.file_format='PNG'
+    scene.render.filepath = image_path
+    bpy.ops.render.render(write_still=1)
+
+
+
+def render_ambient(camera = "Camera0", image_path="output.png"):
+    
+    for light in bpy.data.lights:
+        if light.name.startswith("Light"):
+            bpy.data.lights.remove(light)
+    
+    obj = bpy.data.objects['Plane']
+    mat = diffuse_material("PlaneMaterial")
+    principled = PrincipledBSDFWrapper(mat, is_readonly=False) 
+    principled.base_color_texture.image = bpy.data.images['painting']
+    obj.data.materials.clear()
+    obj.data.materials.append(mat)
+    
     
     bpy.context.scene.render.engine = 'BLENDER_EEVEE'  
     bpy.data.worlds["World"].node_tree.nodes["Background"].inputs[0].default_value = (1, 1, 1, 1)
@@ -141,6 +168,8 @@ def render_ambient(camera = "Camera0", image_path="output.png"):
     scene.render.image_settings.file_format='PNG'
     scene.render.filepath = image_path
     bpy.ops.render.render(write_still=1)
+
+
 
 
 def render_mask(camera = "Camera0", image_path="output.png"):
