@@ -130,7 +130,7 @@ def diffuse_material(name, color=(0,0,0,1) ):
     return material
 
 
-def add_objects(n_obj = 3):
+def add_objects(n_obj = 3, visible=True):
     # Remove Materials
     for mat in bpy.data.materials:
         if mat.name.startswith("ObjMaterial"):
@@ -186,6 +186,8 @@ def add_objects(n_obj = 3):
         else:
             mat = principledBSDF_material("ObjMaterial"+str(i))
         obj.data.materials.append(mat)
+        
+        obj.visible_camera=visible
     
 
 def add_plane(file):

@@ -49,7 +49,7 @@ def generate_dataset_wikiart(src="wikiart/", dst = "SIDAR/",  ids=None,  **kwarg
 
     
 def generate_sequence(img_file, dst = "distortions/", n_cameras = 50, homography=False, n_lights=[2,5],
-                       n_objects=[0,3], ambient=False, **kwargs ):
+                       n_objects=[0,3], ambient=False, visible = True, **kwargs ):
     """_summary_
 
     Args:
@@ -72,7 +72,7 @@ def generate_sequence(img_file, dst = "distortions/", n_cameras = 50, homography
                 np.savetxt(dst+f"/H_{cam_i}_{cam_j}.mat", H_ij)
     
     for j in range(n_cameras+1):
-        generate_scene(img_file, n_lights, n_objects)
+        generate_scene(img_file, n_lights, n_objects,visible)
         camera = f"Camera{j}" if homography else "Camera0"
         if ambient:
             render_ambient(camera, dst +"/{}.png".format(j))
