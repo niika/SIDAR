@@ -12,7 +12,7 @@ def add_camera(name, tx, ty, tz):
 
     fov = np.random.uniform(30,90)
 
-    pi = 3.14159265
+    pi = np.pi
 
 
     # Set camera fov in degrees

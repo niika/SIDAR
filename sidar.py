@@ -41,6 +41,13 @@ def generate_dataset_wikiart(src="wikiart/", dst = "SIDAR/",  ids=None,  **kwarg
     for i in ids:
         try:
             print("Rendering:", images_paths[i])
+
+            bpy.data.images.load(os.path.join(dirs[i], imgs[i]))
+            bpy.data.images[0].name = 'painting'
+            x,y = bpy.data.images['painting'].size
+            print(x*y)
+            if x*y > 4*1e6:
+                continue
             generate_sequence(img_file=os.path.join(dirs[i], imgs[i]), dst=os.path.join(dst,str(i)), **kwargs)
         except:
             print(f"Error in id= {i}")
@@ -111,7 +118,7 @@ with open("config.yml", "r") as stream:
     try:
         config = yaml.safe_load(stream)
 
-        ids = np.random.randint(0,80000, 10)
+        ids = np.random.randint(0,81444, 3000)
         print(ids)
         print(argv)
         print(config["src"])

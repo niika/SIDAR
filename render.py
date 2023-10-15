@@ -17,14 +17,6 @@ def add_front_camera(name="Camera0", tx=0, ty=0, tz=10):
     scene = bpy.context.scene
     scene.camera = camera_object
 
-    #fov = np.random.uniform(30,90)
-    fov =30
-    pi = 3.14159265
-
-
-    # Set camera fov in degrees
-    #camera_data.angle = fov*(pi/180.0)
-
     # Set camera translation
     camera_object.location.x = 0
     camera_object.location.y = 0
@@ -65,9 +57,6 @@ def add_front_camera(name="Camera0", tx=0, ty=0, tz=10):
         #hfov = 2 * np.arctan((0.5 * x) / (0.5 * y / np.tan(theta/2)))
         #camera_data.lens = d/(4*np.tan(hfov/2))
 
-        
-        
-        
     else:
         print("ratio < 1")
         scene.render.resolution_x = y

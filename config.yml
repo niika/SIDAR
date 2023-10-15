@@ -1,16 +1,16 @@
 # source directory
 src : ../wikiart/
 # destination directory
-dst : ../SIDAR-Lights/
+dst : ../SIDAR-Homography/
 # Number of images to generate
-n_cameras : 50
+n_cameras : 10
 # Number of lights added to the scene
 n_lights : [2,5] 
 # Number of occlusions added to the scene
 n_objects: [1,4]
-# render ambient images, free of shadows and lighting effects
-ambient: false
+# render only ambient images, free of shadows and lighting effects
+ambient: False
 # Adding perspective distortions with corresponding homographies
-homography: false
+homography: True
 # visibility of occlusions
-visible: false
+visible: True
