@@ -89,7 +89,6 @@ def principledBSDF_material(name ):
     shader.inputs['Roughness'].default_value = np.random.uniform(0,0.5 ) 
     shader.inputs['IOR'].default_value = np.random.uniform(1,2 ) 
     shader.inputs['Subsurface IOR'].default_value = np.random.uniform(1,2 ) 
-    # link emission shader to material
     
     shader.inputs['Metallic'].default_value = np.random.uniform(0,1) 
     shader.inputs['Specular'].default_value = np.random.uniform(0,1) 

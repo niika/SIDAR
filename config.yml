@@ -1,7 +1,7 @@
 # source directory
 src : ../wikiart/
 # destination directory
-dst : ../SIDAR-Homography/
+dst : ../test/
 # Number of images to generate
 n_cameras : 10
 # Number of lights added to the scene

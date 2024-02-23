@@ -23,7 +23,7 @@ exec(compile(open(path+"/"+"render.py").read(), "render", 'exec'))
 exec(compile(open(path+"/"+"homography.py").read(), "homography", 'exec'))
 
 
-def generate_dataset_wikiart(src="wikiart/", dst = "SIDAR/",  ids=None,  **kwargs ):
+def generate_dataset_wikiart(src="wikiart/", dst = "SIDAR/",  n=10,  **kwargs ):
 
     images_paths = glob.glob(src+"/*/*")
     images_paths.sort()
@@ -35,22 +35,28 @@ def generate_dataset_wikiart(src="wikiart/", dst = "SIDAR/",  ids=None,  **kwarg
             # write each item on a new line
             fp.write("%d:%s\n" % (i,item))
     
-    if ids is None:
-        ids = range(len(imgs))
+    #if ids is None:
+    #    ids = range(len(imgs))
 
-    for i in ids:
-        try:
-            print("Rendering:", images_paths[i])
+    count = 0
+    while count < n: # i in ids:
 
-            bpy.data.images.load(os.path.join(dirs[i], imgs[i]))
-            bpy.data.images[0].name = 'painting'
-            x,y = bpy.data.images['painting'].size
-            print(x*y)
-            if x*y > 4*1e6:
-                continue
-            generate_sequence(img_file=os.path.join(dirs[i], imgs[i]), dst=os.path.join(dst,str(i)), **kwargs)
-        except:
-            print(f"Error in id= {i}")
+        i = np.random.randint(0,81444)
+        print(f"Rendering:{i+1}/{n}", images_paths[i])
+
+        bpy.data.images.load(os.path.join(dirs[i], imgs[i]))
+        bpy.data.images[0].name = 'painting'
+        x,y = bpy.data.images['painting'].size
+        print(x*y)
+        if x*y > 5*1e6:
+            # Remove Materials
+            for img in bpy.data.images:
+                if img.name.startswith("painting"):
+                    bpy.data.images.remove(img)
+            continue
+        generate_sequence(img_file=os.path.join(dirs[i], imgs[i]), dst=os.path.join(dst,str(i)), **kwargs)
+        count = count +1 
+
 
 
 
@@ -118,12 +124,12 @@ with open("config.yml", "r") as stream:
     try:
         config = yaml.safe_load(stream)
 
-        ids = np.random.randint(0,81444, 3000)
-        print(ids)
+        #
+        #print(ids)
         print(argv)
         print(config["src"])
         print(config)        
-        generate_dataset_wikiart(ids=ids,**config)
+        generate_dataset_wikiart(n=2,**config)
 
     except yaml.YAMLError as exc:
         print(exc)
