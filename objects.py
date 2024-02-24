@@ -85,17 +85,17 @@ def principledBSDF_material(name ):
     
     shader = material.node_tree.nodes.new("ShaderNodeBsdfPrincipled")
     shader.inputs['Base Color'].default_value = np.random.uniform(0,1 ,4) 
-    shader.inputs['Subsurface Color'].default_value = np.random.uniform(0,1 ,4) 
+    # shader.inputs['Subsurface Color'].default_value = np.random.uniform(0,1 ,4) 
     shader.inputs['Roughness'].default_value = np.random.uniform(0,0.5 ) 
     shader.inputs['IOR'].default_value = np.random.uniform(1,2 ) 
-    shader.inputs['Subsurface IOR'].default_value = np.random.uniform(1,2 ) 
-    
+    #shader.inputs['Subsurface Weight'].default_value = np.random.uniform(0,1 ) 
+ 
     shader.inputs['Metallic'].default_value = np.random.uniform(0,1) 
-    shader.inputs['Specular'].default_value = np.random.uniform(0,1) 
-    shader.inputs['Transmission'].default_value = np.random.uniform(0,1) 
-    shader.inputs['Transmission Roughness'].default_value = np.random.uniform(0,1) 
-    shader.inputs['Clearcoat'].default_value = np.random.uniform(0,1) 
-    shader.inputs['Clearcoat Roughness'].default_value = np.random.uniform(0,1) 
+    shader.inputs['Specular IOR Level'].default_value = np.random.uniform(0,1) 
+    shader.inputs['Transmission Weight'].default_value = np.random.uniform(0,1) 
+    #shader.inputs['Transmission Roughness'].default_value = np.random.uniform(0,1) 
+    shader.inputs['Coat Weight'].default_value = np.random.uniform(0,1) 
+    shader.inputs['Coat Roughness'].default_value = np.random.uniform(0,1) 
     material.node_tree.links.new(material_output.inputs[0], shader.outputs[0])
 
     return material
@@ -111,19 +111,22 @@ def diffuse_material(name, color=(0,0,0,1) ):
     nodes = material.node_tree.nodes
     
     shader = material.node_tree.nodes.new("ShaderNodeBsdfPrincipled")
+    
+
     shader.inputs['Base Color'].default_value = color
-    shader.inputs['Subsurface Color'].default_value = (0,0,0,1)
+    #shader.inputs['Subsurface Color'].default_value = (0,0,0,1)
     shader.inputs['Roughness'].default_value = 1
     shader.inputs['IOR'].default_value = 0
-    shader.inputs['Subsurface IOR'].default_value = 0
-    # link emission shader to material
+    shader.inputs['Subsurface Weight'].default_value = 0
+
     
     shader.inputs['Metallic'].default_value = 0
-    shader.inputs['Specular'].default_value = 0
-    shader.inputs['Transmission'].default_value = 0
-    shader.inputs['Transmission Roughness'].default_value = 0
-    shader.inputs['Clearcoat'].default_value = 0
-    shader.inputs['Clearcoat Roughness'].default_value = 0
+    shader.inputs['Specular IOR Level'].default_value = 0
+    shader.inputs['Transmission Weight'].default_value = 0
+    #shader.inputs['Transmission Roughness'].default_value = 0
+    shader.inputs['Coat Weight'].default_value = 0
+    shader.inputs['Coat Roughness'].default_value =0
+    # link emission shader to material
     material.node_tree.links.new(material_output.inputs[0], shader.outputs[0])
 
     return material

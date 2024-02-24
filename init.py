@@ -5,7 +5,7 @@ import os
  
 # path to python.exe
 python_exe = os.listdir(os.path.join(sys.prefix, "bin"))[0]
-print(python_exe)
+print("Python:",python_exe)
 python_exe = os.path.join(sys.prefix, 'bin', python_exe)
 print(python_exe)
 # upgrade pip
